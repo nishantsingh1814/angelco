@@ -15,11 +15,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 public class MainActivity extends AppCompatActivity {
 
     private WebView myWebView;
     private ProgressBar progressBar;
-
+    private AdView mAdView;
     private FloatingActionButton mJobFab;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -27,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setIndeterminate(false);
@@ -50,11 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
     private class MyWebChromeClient extends WebChromeClient {
         public void onProgressChanged(WebView view, int progress) {
-            //Make the bar disappear after URL is loaded, and changes string to Loading...
             progressBar.setProgress(progress);
-            setProgress(progress * 100); //Make the bar disappear after URL is loaded
+            setProgress(progress * 100);
 
-            // Return the app name after finish loading
             if (progress == 100)
                 progressBar.setVisibility(View.GONE);
             else {
